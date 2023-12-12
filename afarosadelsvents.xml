@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="4.0" method="upgrade">
+    <name>com_afarosadelsvents</name>
+    <creationDate>2023-12-12</creationDate>
+    <copyright>2023 JooWebs.com</copyright>
+    <license>Licencia Pública General GNU versión 2 o posterior. Consulte LICENSE.txt</license>
+    <author>Miquel Llabrés</author>
+    <authorEmail>info@joowebs.com</authorEmail>
+    <authorUrl>http://joowebs.com</authorUrl>
+    <version>CVS: 1.0.0</version>
+    <description>COM_AFAROSADELSVENTS_XML_DESCRIPTION</description>
+    <namespace path="src">Afarosadelsvents\Component\Afarosadelsvents</namespace>
+    
+    <scriptfile>script.php</scriptfile>
+    
+    <install> <!-- Runs on install -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    <update> <!-- Runs on update -->
+        <schemas>
+            <schemapath type="mysql">sql/updates</schemapath>
+        </schemas>
+    </update>
+    <uninstall> <!-- Runs on uninstall -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+
+    <api>
+		<files folder="webservices">
+			<folder>src</folder>
+		</files>
+	</api>
+
+    <files folder="site">
+        <folder>src</folder>
+        <folder>forms</folder>
+        <folder>tmpl</folder>
+    </files>
+    <media destination="com_afarosadelsvents" folder="media">
+        <folder>css</folder>
+        <folder>js</folder>
+        <filename>joomla.asset.json</filename>
+    </media>
+    <languages folder="site/languages">
+        
+			<language tag="ca-ES">ca-ES/com_afarosadelsvents.ini</language>
+			<language tag="es-ES">es-ES/com_afarosadelsvents.ini</language>
+    </languages>
+    <administration>
+        <menu>COM_AFAROSADELSVENTS</menu>
+        <submenu>
+            
+			<menu link="option=com_afarosadelsvents&amp;view=families" view="families" alt="Afarosadelsvents/Families">COM_AFAROSADELSVENTS_TITLE_FAMILIES</menu>
+
+			<menu link="option=com_afarosadelsvents&amp;view=menjadors" view="menjadors" alt="Afarosadelsvents/Menjadors">COM_AFAROSADELSVENTS_TITLE_MENJADORS</menu>
+
+			<menu link="option=com_afarosadelsvents&amp;view=llistamenjadors" view="llistamenjadors" alt="Afarosadelsvents/Llistamenjadors">COM_AFAROSADELSVENTS_TITLE_LLISTAMENJADORS</menu>
+
+			<menu link="option=com_afarosadelsvents&amp;view=resums" view="resums" alt="Afarosadelsvents/Resums">COM_AFAROSADELSVENTS_TITLE_RESUMS</menu>
+
+			<menu link="option=com_afarosadelsvents&amp;view=facturacios" view="facturacios" alt="Afarosadelsvents/Facturacios">COM_AFAROSADELSVENTS_TITLE_FACTURACIOS</menu>
+
+        </submenu>
+        <files folder="administrator">
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <folder>forms</folder>
+            <folder>src</folder>
+            <folder>tmpl</folder>
+            <folder>services</folder>
+            <folder>presets</folder>
+            <folder>sql</folder>
+        </files>
+        <languages folder="administrator/languages">
+            
+			<language tag="ca-ES">ca-ES/com_afarosadelsvents.ini</language>
+			<language tag="ca-ES">ca-ES/com_afarosadelsvents.sys.ini</language>
+			<language tag="es-ES">es-ES/com_afarosadelsvents.ini</language>
+			<language tag="es-ES">es-ES/com_afarosadelsvents.sys.ini</language>
+        </languages>
+    </administration>
+    <config>
+        <fields name="params">
+            <fieldset name="component">
+                <field name="save_history" default="0" />
+            </fieldset>
+        </fields>
+    </config>
+    <plugins>
+		<plugin group="finder" plugin="afarosadelsventsfamilies"/>
+		<plugin group="privacy" plugin="afarosadelsventsfamilies"/>
+		<plugin group="webservices" plugin="afarosadelsvents"/>
+		<plugin group="finder" plugin="afarosadelsventsmenjadors"/>
+		<plugin group="privacy" plugin="afarosadelsventsmenjadors"/>
+		<plugin group="webservices" plugin="afarosadelsvents"/>
+    </plugins>
+    <modules>
+		<module module="mod_afarosadelsvents" />
+	</modules>
+
+    <updateservers>
+        <server type="extension" priority="1" name="com_afarosadelsvents">https://nocdn.component-creator.com/index.php?task=builder.preupdatecheckhook&amp;option=com_combuilder&amp;component=NTQ3OTctMjA5ODk0</server>
+    </updateservers>
+</extension>
+<!-- Component built by the Joomla Component Creator -->
+<!-- http://www.component-creator.com/ -->
