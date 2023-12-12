@@ -8,6 +8,8 @@
  */
 
 namespace Afarosadelsvents\Component\Afarosadelsvents\Site\Controller;
+use Joomla\CMS\Factory as JFactory;
+
 
 \defined('_JEXEC') or die;
 
@@ -73,110 +75,126 @@ class MenjadorformController extends FormController
 	 * @throws  Exception
 	 * @since   1.0.0
 	 */
-	public function save($key = NULL, $urlVar = NULL)
-	{
-		// Check for request forgeries.
-		$this->checkToken();
+public function save($key = NULL, $urlVar = NULL)
+{
+    // Check for request forgeries.
+    $this->checkToken();
 
-		// Initialise variables.
-		$model = $this->getModel('Menjadorform', 'Site');
+    // Initialise variables.
+    $model = $this->getModel('Menjadorform', 'Site');
+    $data = $this->input->get('jform', array(), 'array');
 
-		// Get the user data.
-		$data = $this->input->get('jform', array(), 'array');
+    // Validate the posted data.
+    $form = $model->getForm();
+    if (!$form)
+    {
+        throw new \Exception($model->getError(), 500);
+    }
 
-		// Validate the posted data.
-		$form = $model->getForm();
+    // Send an object which can be modified through the plugin event
+    $objData = (object) $data;
+    $this->app->triggerEvent(
+        'onContentNormaliseRequestData',
+        array($this->option . '.' . $this->context, $objData, $form)
+    );
+    $data = (array) $objData;
 
-		if (!$form)
-		{
-			throw new \Exception($model->getError(), 500);
-		}
+    // Extraer los datos del formulario
+    $nombre = $data['nom_menjador'];
+    $opcion = $data['opcio_menjador'];
+    $fechas = explode(',', $data['data_menjador']); // Suponiendo que 'data_menjador' es una cadena separada por comas
 
-		// Send an object which can be modified through the plugin event
-		$objData = (object) $data;
-		$this->app->triggerEvent(
-			'onContentNormaliseRequestData',
-			array($this->option . '.' . $this->context, $objData, $form)
-		);
-		$data = (array) $objData;
+    // Iniciar la variable de retorno
+    $allSaved = true;
 
-		// Validate the posted data.
-		$data = $model->validate($form, $data);
+    // Procesar cada fecha
+    foreach ($fechas as $fecha) {
+        $db = JFactory::getDbo();
 
-		// Check for errors.
-		if ($data === false)
-		{
-			// Get the validation messages.
-			$errors = $model->getErrors();
+        // Verificar si ya existe un registro para ese niño en esa fecha
+        $query = $db->getQuery(true);
+        $query->select('COUNT(*)')
+              ->from($db->quoteName('#__afarosadelsvents_menjador'))
+              ->where($db->quoteName('nom_menjador') . ' = ' . $db->quote($nombre))
+              ->where($db->quoteName('data_menjador') . ' = ' . $db->quote(JFactory::getDate($fecha)->format('Y-m-d')));
+        $db->setQuery($query);
 
-			// Push up to three validation messages out to the user.
-			for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++)
-			{
-				if ($errors[$i] instanceof \Exception)
-				{
-					$this->app->enqueueMessage($errors[$i]->getMessage(), 'warning');
-				}
-				else
-				{
-					$this->app->enqueueMessage($errors[$i], 'warning');
-				}
-			}
+        try {
+            $count = $db->loadResult();
+            if ($count > 0) {
+                // El niño ya está inscrito para esta fecha
+                JFactory::getApplication()->enqueueMessage(Text::sprintf('ja està apuntat al %s', $fecha), 'warning');
+                $allSaved = false;
+                continue; // Pasa a la siguiente fecha
+            }
+        } catch (RuntimeException $e) {
+            JFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
+            $allSaved = false;
+            break;
+        }
 
-			$jform = $this->input->get('jform', array(), 'ARRAY');
+        // Obtener comunitat_nin de la tabla families
+        $query = $db->getQuery(true);
+        $query->select($db->quoteName('comunitat_nin'))
+              ->from($db->quoteName('#__afarosadelsvents_families'))
+              ->where($db->quoteName('nom_nin') . ' = ' . $db->quote($nombre));
+        $db->setQuery($query);
 
-			// Save the data in the session.
-			$this->app->setUserState('com_afarosadelsvents.edit.menjador.data', $jform);
+        try {
+            $comunitatNin = $db->loadResult();
+        } catch (RuntimeException $e) {
+            JFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
+            $allSaved = false;
+            break;
+        }
 
-			// Redirect back to the edit screen.
-			$id = (int) $this->app->getUserState('com_afarosadelsvents.edit.menjador.id');
-			$this->setRedirect(Route::_('index.php?option=com_afarosadelsvents&view=menjadorform&layout=edit&id=' . $id, false));
+        $registroIndividual = [
+            'nom_menjador' => $nombre,
+            'opcio_menjador' => $opcion,
+            'data_menjador' => JFactory::getDate($fecha)->format('Y-m-d'),
+            'comunitat_nin_menjador' => $comunitatNin,
+            // ...otros campos necesarios...
+        ];
 
-			$this->redirect();
-		}
+        // Validar y guardar cada registro
+        $registroValidado = $model->validate($form, $registroIndividual);
+        if ($registroValidado === false)
+        {
+            $allSaved = false;
+            break; // Detiene el procesamiento si hay un error
+        }
 
-		// Attempt to save the data.
-		$return = $model->save($data);
+        // Intentar guardar los datos.
+        $return = $model->save($registroValidado);
+        if ($return === false)
+        {
+            $allSaved = false;
+            break; // Detiene el procesamiento si hay un error
+        }
+    }
 
-		// Check for errors.
-		if ($return === false)
-		{
-			// Save the data in the session.
-			$this->app->setUserState('com_afarosadelsvents.edit.menjador.data', $data);
+    // Mensajes y redirecciones después de guardar todos los registros
+    if ($allSaved)
+    {
+        $this->setMessage(Text::_('COM_AFAROSADELSVENTS_ITEM_SAVED_SUCCESSFULLY'));
+    }
+    else
+    {
+        $this->setMessage(Text::_('COM_AFAROSADELSVENTS_SAVE_FAILED'), 'warning');
+    }
 
-			// Redirect back to the edit screen.
-			$id = (int) $this->app->getUserState('com_afarosadelsvents.edit.menjador.id');
-			$this->setMessage(Text::sprintf('Save failed', $model->getError()), 'warning');
-			$this->setRedirect(Route::_('index.php?option=com_afarosadelsvents&view=menjadorform&layout=edit&id=' . $id, false));
-			$this->redirect();
-		}
+    $menu = Factory::getApplication()->getMenu();
+    $item = $menu->getActive();
+    $url = (empty($item->link) ? 'index.php?option=com_afarosadelsvents&view=menjadors' : $item->link);
+    $this->setRedirect(Route::_($url, false));
+    
+    // Flush the data from the session.
+    $this->app->setUserState('com_afarosadelsvents.edit.menjador.data', null);
 
-		// Check in the profile.
-		if ($return)
-		{
-			$model->checkin($return);
-		}
+    // Invoke the postSave method to allow for the child class to access the model.
+    $this->postSaveHook($model, $data);
+}
 
-		// Clear the profile id from the session.
-		$this->app->setUserState('com_afarosadelsvents.edit.menjador.id', null);
-
-		// Redirect to the list screen.
-		if (!empty($return))
-		{
-			$this->setMessage(Text::_('COM_AFAROSADELSVENTS_ITEM_SAVED_SUCCESSFULLY'));
-		}
-		
-		$menu = Factory::getApplication()->getMenu();
-		$item = $menu->getActive();
-		$url  = (empty($item->link) ? 'index.php?option=com_afarosadelsvents&view=menjadors' : $item->link);
-		$this->setRedirect(Route::_($url, false));
-
-		// Flush the data from the session.
-		$this->app->setUserState('com_afarosadelsvents.edit.menjador.data', null);
-
-		// Invoke the postSave method to allow for the child class to access the model.
-		$this->postSaveHook($model, $data);
-
-	}
 
 	/**
 	 * Method to abort current operation
