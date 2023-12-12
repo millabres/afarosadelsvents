@@ -100,8 +100,9 @@ $wa->useStyle('com_afarosadelsvents.list');
 							<?php echo $this->escape($item->comunitat_nin_menjador); ?></a>
 					</td>
 					<td>
-						<?php echo $item->data_menjador; ?>
-					</td>
+    <?php echo HTMLHelper::_('date', $item->data_menjador, 'd-m-Y'); ?>
+</td>
+
 					<td>
 						<?php echo $item->opcio_menjador; ?>
 					</td>
