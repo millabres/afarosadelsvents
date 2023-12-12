@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="4.0" type="plugin" group="privacy">
+    <name>plg_privacy_afarosadelsventsfamilies</name>
+    <author>Miquel Llabrés</author>
+    <creationDate>2023-12-12</creationDate>
+    <copyright>2023 JooWebs.com</copyright>
+    <license>Licencia Pública General GNU versión 2 o posterior. Consulte LICENSE.txt</license>
+    <authorEmail>info@joowebs.com</authorEmail>
+    <authorUrl>http://joowebs.com</authorUrl>
+    <version>CVS: 1.0.0</version>
+    <description>PLG_PRIVACY_COM_AFAROSADELSVENTS_XML_DESCRIPTION</description>
+    <files>
+        <filename plugin="afarosadelsventsfamilies">afarosadelsventsfamilies.php</filename>
+        <filename>index.html</filename>
+    </files>
+    <languages folder="languages">
+        
+			<language tag="ca-ES">ca-ES/plg_privacy_afarosadelsventsfamilies.ini</language>
+			<language tag="ca-ES">ca-ES/plg_privacy_afarosadelsventsfamilies.sys.ini</language>
+			<language tag="es-ES">es-ES/plg_privacy_afarosadelsventsfamilies.ini</language>
+			<language tag="es-ES">es-ES/plg_privacy_afarosadelsventsfamilies.sys.ini</language>
+    </languages>
+    <config>
+    </config>
+    <updateservers>
+        <server type="extension" priority="1" name="com_afarosadelsvents">https://www.component-creator.com/index.php?task=builder.preupdatecheckhook&amp;option=com_combuilder&amp;component=NTQ3OTctMjA5ODk0</server>
+    </updateservers>
+</extension>

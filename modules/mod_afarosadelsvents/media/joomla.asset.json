@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "mod_afarosadelsvents",
+  "version": "CVS: 1.0.0",
+  "license": "Licencia Pública General GNU versión 2 o posterior. Consulte LICENSE.txt",
+  "assets": [
+    {
+      "name": "mod_afarosadelsvents.style",
+      "type": "style",
+      "uri": "mod_afarosadelsvents/style.css"
+    },
+    {
+      "name": "mod_afarosadelsvents.script",
+      "type": "script",
+      "uri": "mod_afarosadelsvents/script.js"
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="4.0" method="upgrade" client="site">
+    <name>MOD_AFAROSADELSVENTS_NAME</name>
+    <creationDate>2023-12-12</creationDate>
+    <copyright>2023 JooWebs.com</copyright>
+    <license>Licencia Pública General GNU versión 2 o posterior. Consulte LICENSE.txt</license>
+    <author>Miquel Llabrés</author>
+    <authorEmail>info@joowebs.com</authorEmail>
+    <authorUrl>http://joowebs.com</authorUrl>
+    <version>CVS: 1.0.0</version>
+    <description>MOD_AFAROSADELSVENTS_DESCRIPTION</description>
+    <namespace path="src">Afarosadelsvents\Module\Afarosadelsvents</namespace>
+    
+    <files>
+        <filename module="mod_afarosadelsvents">mod_afarosadelsvents.php</filename>
+        <filename>index.html</filename>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+    </files>
+    <media destination="mod_afarosadelsvents" folder="media">
+        <folder>css</folder>
+        <folder>js</folder>
+        <filename>joomla.asset.json</filename>
+    </media>
+    <languages folder="language">
+        
+			<language tag="ca-ES">ca-ES/mod_afarosadelsvents.ini</language>
+			<language tag="ca-ES">ca-ES/mod_afarosadelsvents.sys.ini</language>
+			<language tag="es-ES">es-ES/mod_afarosadelsvents.ini</language>
+			<language tag="es-ES">es-ES/mod_afarosadelsvents.sys.ini</language>
+    </languages>
+    <config>
+        <fields name="params">
+            <fieldset 
+                name="content_type" 
+                label="MOD_AFAROSADELSVENTS_CONTENT_TYPE_TAB_LBL"
+                description="MOD_AFAROSADELSVENTS_CONTENT_TYPE_TAB_DESC">
+                <field
+                    name="content_type" type="list"
+                    label="MOD_AFAROSADELSVENTS_CONTENT_TYPE_LBL"
+                    description="MOD_AFAROSADELSVENTS_CONTENT_TYPE_DESC">
+                    <option value="blank">MOD_AFAROSADELSVENTS_CUSTOM_CONTENT</option>
+                    <option value="list">MOD_AFAROSADELSVENTS_LIST</option>
+                    <option value="item">MOD_AFAROSADELSVENTS_ITEM</option>
+                </field>
+            </fieldset>
+            <fieldset 
+                name="blank_content" 
+                label="MOD_AFAROSADELSVENTS_CUSTOM_CONTENT_TAB_LBL"
+                description="MOD_AFAROSADELSVENTS_CUSTOM_CONTENT_TAB_DESC">
+                <field 
+                    name="html_content" type="editor" filter="safehtml"
+                    label="MOD_AFAROSADELSVENTS_HTML_LBL"
+                    description="MOD_AFAROSADELSVENTS_HTML_DESC" />
+            </fieldset>
+            <fieldset 
+                name="list_content" 
+                label="MOD_AFAROSADELSVENTS_LIST_CONTENT_TAB_LBL"
+                description="MOD_AFAROSADELSVENTS_LIST_CONTENT_TAB_DESC">
+                <field
+                    name="table" type="list"
+                    label="MOD_AFAROSADELSVENTS_TABLE_LBL"
+                    description="MOD_AFAROSADELSVENTS_TABLE_DESC">
+                    
+	<option value="#__afarosadelsvents_families">#__afarosadelsvents_families</option>
+	<option value="#__afarosadelsvents_menjador">#__afarosadelsvents_menjador</option>
+                </field>
+                <field 
+                    name="field" type="groupedlist" default=""
+                    label="MOD_AFAROSADELSVENTS_FIELD_LBL"
+                    description="MOD_AFAROSADELSVENTS_FIELD_DESC">
+                    
+	<group label="#__afarosadelsvents_families">
+		<option value="#__afarosadelsvents_families:id">id</option>
+		<option value="#__afarosadelsvents_families:created_by">created_by</option>
+		<option value="#__afarosadelsvents_families:modified_by">modified_by</option>
+		<option value="#__afarosadelsvents_families:nom_nin">nom_nin</option>
+		<option value="#__afarosadelsvents_families:comunitat_nin">comunitat_nin</option>
+		<option value="#__afarosadelsvents_families:data_naixement">data_naixement</option>
+		<option value="#__afarosadelsvents_families:comentaris">comentaris</option>
+	</group>
+	<group label="#__afarosadelsvents_menjador">
+		<option value="#__afarosadelsvents_menjador:id">id</option>
+		<option value="#__afarosadelsvents_menjador:created_by">created_by</option>
+		<option value="#__afarosadelsvents_menjador:modified_by">modified_by</option>
+		<option value="#__afarosadelsvents_menjador:comunitat_nin_menjador">comunitat_nin_menjador</option>
+		<option value="#__afarosadelsvents_menjador:id_nin_menjador">id_nin_menjador</option>
+		<option value="#__afarosadelsvents_menjador:nom_menjador">nom_menjador</option>
+		<option value="#__afarosadelsvents_menjador:data_menjador">data_menjador</option>
+		<option value="#__afarosadelsvents_menjador:opcio_menjador">opcio_menjador</option>
+	</group>
+                </field>
+                <field 
+                    name="offset" type="text" default="0" filter="uint" class="input-small"
+                    label="MOD_AFAROSADELSVENTS_OFFSET_LBL"
+                    description="MOD_AFAROSADELSVENTS_OFFSET_DESC" />
+                <field 
+                    name="limit" type="text" default="10" filter="uint" class="input-small"
+                    label="MOD_AFAROSADELSVENTS_LIMIT_LBL"
+                    description="MOD_AFAROSADELSVENTS_LIMIT_DESC" />
+            </fieldset>
+            <fieldset 
+                name="item_content" 
+                label="MOD_AFAROSADELSVENTS_ITEM_CONTENT_TAB"
+                description="MOD_AFAROSADELSVENTS_ITEM_CONTENT_TAB_DESC">
+                <field
+                    name="item_table" type="list"
+                    label="MOD_AFAROSADELSVENTS_TABLE_LBL"
+                    description="MOD_AFAROSADELSVENTS_TABLE_DESC">
+                    
+	<option value="#__afarosadelsvents_families">#__afarosadelsvents_families</option>
+	<option value="#__afarosadelsvents_menjador">#__afarosadelsvents_menjador</option>
+                </field>
+                <field 
+                    name="item_id" type="text" filter="uint" class="input-small"
+                    label="MOD_AFAROSADELSVENTS_ITEM_ID_LBL"
+                    description="MOD_AFAROSADELSVENTS_ITEM_ID_DESC"
+                />
+            </fieldset>
+        </fields>
+    </config>
+    <updateservers>
+        <server type="extension" priority="1" name="com_afarosadelsvents">https://www.component-creator.com/index.php?task=builder.preupdatecheckhook&amp;option=com_combuilder&amp;component=NTQ3OTctMjA5ODk0</server>
+    </updateservers>
+</extension>

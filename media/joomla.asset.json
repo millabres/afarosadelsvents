@@ -1,0 +1,29 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "com_afarosadelsvents",
+  "version": "CVS: 1.0.0",
+  "license": "Licencia Pública General GNU versión 2 o posterior. Consulte LICENSE.txt",
+  "assets": [
+    {
+      "name": "com_afarosadelsvents.admin",
+      "type": "style",
+      "uri": "com_afarosadelsvents/admin.css"
+    },
+    {
+      "name": "com_afarosadelsvents.admin",
+      "type": "script",
+      "uri": "com_afarosadelsvents/admin.js",
+      "dependencies": [
+        "jquery"
+      ],
+      "attributes": {
+        "defer": true
+      }
+    },
+    {
+        "name": "com_afarosadelsvents.list",
+        "type": "style",
+        "uri": "com_afarosadelsvents/list.css"
+    }
+  ]
+}
