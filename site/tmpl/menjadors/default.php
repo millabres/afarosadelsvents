@@ -96,7 +96,6 @@ $wa->useStyle('com_afarosadelsvents.list');
 							<a href="<?php echo Route::_('index.php?option=com_afarosadelsvents&task=menjador.checkin&id=' . $item->id .'&'. Session::getFormToken() .'=1'); ?>">
 							<?php echo HTMLHelper::_('jgrid.checkedout', $i, $item->uEditor, $item->checked_out_time, 'menjador.', false); ?></a>
 						<?php endif; ?>
-						<a href="<?php echo Route::_('index.php?option=com_afarosadelsvents&view=menjadorform&id='.(int) $item->id); ?>">
 							<?php echo $this->escape($item->comunitat_nin_menjador); ?></a>
 					</td>
 					<td>
