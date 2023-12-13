@@ -39,7 +39,7 @@ $wa->useStyle('com_afarosadelsvents.list');
 
 <form action="<?php echo htmlspecialchars(Uri::getInstance()->toString()); ?>" method="post"
 	  name="adminForm" id="adminForm">
-	<?php if(!empty($this->filterForm)) { echo LayoutHelper::render('joomla.searchtools.default', array('view' => $this)); } ?>
+	<?php //if(!empty($this->filterForm)) { echo LayoutHelper::render('joomla.searchtools.default', array('view' => $this)); } ?>
 	<div class="table-responsive">
 		<table class="table table-striped" id="menjadorList">
 			<thead>
@@ -110,12 +110,12 @@ $wa->useStyle('com_afarosadelsvents.list');
 						<td class="center">
 							<?php $canCheckin = Factory::getApplication()->getIdentity()->authorise('core.manage', 'com_afarosadelsvents.' . $item->id) || $item->checked_out == Factory::getApplication()->getIdentity()->id; ?>
 
-							<?php if($canEdit && $item->checked_out == 0): ?>
-								<a href="<?php echo Route::_('index.php?option=com_afarosadelsvents&task=menjador.edit&id=' . $item->id, false, 2); ?>" class="btn btn-mini" type="button"><i class="icon-edit" ></i></a>
-							<?php endif; ?>
+							<?php /*if($canEdit && $item->checked_out == 0): ?>
+            <a href="<?php echo Route::_('index.php?option=com_afarosadelsvents&task=menjador.edit&id=' . $item->id, false, 2); ?>" class="btn btn-mini" type="button"><i class="icon-edit" ></i></a>
+        <?php endif;*/ ?>
 							<?php if ($canDelete): ?>
 								<a href="<?php echo Route::_('index.php?option=com_afarosadelsvents&task=menjadorform.remove&id=' . $item->id, false, 2); ?>" class="btn btn-mini delete-button" type="button"><i class="icon-trash" ></i></a>
-							<?php endif; ?>
+							<?php endif;?>
 						</td>
 					<?php endif; ?>
 
