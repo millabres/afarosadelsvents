@@ -111,19 +111,39 @@ public function save($key = NULL, $urlVar = NULL)
     foreach ($fechas as $fecha) {
         $db = JFactory::getDbo();
 
+        // Obtener el ID del niño de la tabla de familias basado en el nombre
+        $query = $db->getQuery(true);
+        $query->select($db->quoteName('id'))
+              ->from($db->quoteName('#__afarosadelsvents_families'))
+              ->where($db->quoteName('nom_nin') . ' = ' . $db->quote($nombre));
+        $db->setQuery($query);
+
+        try {
+            $idNinMenjador = $db->loadResult();
+        } catch (RuntimeException $e) {
+            JFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
+            $allSaved = false;
+            break;
+        }
+
+        if (!$idNinMenjador) {
+            JFactory::getApplication()->enqueueMessage(Text::sprintf('No se encontró el ID para el niño %s', $nombre), 'error');
+            $allSaved = false;
+            continue; // Pasa a la siguiente fecha
+        }
+
         // Verificar si ya existe un registro para ese niño en esa fecha
         $query = $db->getQuery(true);
         $query->select('COUNT(*)')
               ->from($db->quoteName('#__afarosadelsvents_menjador'))
-              ->where($db->quoteName('nom_menjador') . ' = ' . $db->quote($nombre))
+              ->where($db->quoteName('id_nin_menjador') . ' = ' . (int) $idNinMenjador)
               ->where($db->quoteName('data_menjador') . ' = ' . $db->quote(JFactory::getDate($fecha)->format('Y-m-d')));
         $db->setQuery($query);
 
         try {
             $count = $db->loadResult();
             if ($count > 0) {
-                // El niño ya está inscrito para esta fecha
-                JFactory::getApplication()->enqueueMessage(Text::sprintf('ja està apuntat al %s', $fecha), 'warning');
+                JFactory::getApplication()->enqueueMessage(Text::sprintf('ja està apuntat el %s', $fecha), 'warning');
                 $allSaved = false;
                 continue; // Pasa a la siguiente fecha
             }
@@ -132,6 +152,8 @@ public function save($key = NULL, $urlVar = NULL)
             $allSaved = false;
             break;
         }
+
+        
 
         // Obtener comunitat_nin de la tabla families
         $query = $db->getQuery(true);
@@ -153,7 +175,7 @@ public function save($key = NULL, $urlVar = NULL)
             'opcio_menjador' => $opcion,
             'data_menjador' => JFactory::getDate($fecha)->format('Y-m-d'),
             'comunitat_nin_menjador' => $comunitatNin,
-            // ...otros campos necesarios...
+            'id_nin_menjador' => $idNinMenjador // Guardar el ID del niño
         ];
 
         // Validar y guardar cada registro
