@@ -22,6 +22,10 @@ use \Joomla\Utilities\ArrayHelper;
 use \Afarosadelsvents\Component\Afarosadelsvents\Site\Helper\AfarosadelsventsHelper;
 
 
+
+
+
+
 /**
  * Methods supporting a list of Afarosadelsvents records.
  *
@@ -179,6 +183,32 @@ class MenjadorsModel extends ListModel
 			$query->where('(a.state IN (0, 1))');
 		}
 
+		
+		
+
+		
+		// Establecer la zona horaria de Madrid
+    date_default_timezone_set('Europe/Madrid');
+    $currentDateTime = new \DateTime('now');
+    $currentDate = $currentDateTime->format('Y-m-d');
+    $currentTime = $currentDateTime->format('H:i:s');
+		
+		// Imprimir la fecha y hora actuales para depuración
+    echo 'Hora Actual : ' . $currentTime . '<br>';
+
+
+    // Resto de tu código...
+
+    // Comprobar si la hora actual es posterior a las 22:10
+    if ($currentTime > '22:22') {
+        // Si es posterior a las 22:10, usa la fecha de mañana
+        $tomorrow = $currentDateTime->modify('+1 day')->format('Y-m-d');
+        $query->where('a.data_menjador >= ' . $db->quote($tomorrow));
+    } else {
+        // Si es anterior a las 22:10, usa la fecha de hoy
+        $query->where('a.data_menjador >= ' . $db->quote($currentDate));
+    }
+		
 			// Filter by search in title
 			$search = $this->getState('filter.search');
 
