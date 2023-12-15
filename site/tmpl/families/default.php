@@ -37,6 +37,11 @@ $wa = $this->document->getWebAssetManager();
 $wa->useStyle('com_afarosadelsvents.list');
 ?>
 
+<!-- Título de la lista en h2, centrado y subrayado -->
+<h2 style="text-align: center; text-decoration: underline;">
+    <?php echo Text::_('COM_AFAROSADELSVENTS_FAMILY_LIST_TITLE'); ?>
+</h2>
+
 <form action="<?php echo htmlspecialchars(Uri::getInstance()->toString()); ?>" method="post"
 	  name="adminForm" id="adminForm">
 	<?php //if(!empty($this->filterForm)) { echo LayoutHelper::render('joomla.searchtools.default', array('view' => $this)); } ?>
