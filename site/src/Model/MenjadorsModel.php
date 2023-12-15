@@ -193,8 +193,7 @@ class MenjadorsModel extends ListModel
     $currentDate = $currentDateTime->format('Y-m-d');
     $currentTime = $currentDateTime->format('H:i:s');
 		
-		// Imprimir la fecha y hora actuales para depuración
-    echo 'Hora Actual : ' . $currentTime . '<br>';
+		
 
 
     // Resto de tu código...
