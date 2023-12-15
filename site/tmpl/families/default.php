@@ -39,15 +39,13 @@ $wa->useStyle('com_afarosadelsvents.list');
 
 <form action="<?php echo htmlspecialchars(Uri::getInstance()->toString()); ?>" method="post"
 	  name="adminForm" id="adminForm">
-	<?php if(!empty($this->filterForm)) { echo LayoutHelper::render('joomla.searchtools.default', array('view' => $this)); } ?>
+	<?php //if(!empty($this->filterForm)) { echo LayoutHelper::render('joomla.searchtools.default', array('view' => $this)); } ?>
 	<div class="table-responsive">
 		<table class="table table-striped" id="familyList">
 			<thead>
 			<tr>
 				
-					<th class=''>
-						<?php echo HTMLHelper::_('grid.sort',  'COM_AFAROSADELSVENTS_FAMILIES_ID', 'a.id', $listDirn, $listOrder); ?>
-					</th>
+					
 
 					<th class=''>
 						<?php echo HTMLHelper::_('grid.sort',  'COM_AFAROSADELSVENTS_FAMILIES_NOM_NIN', 'a.nom_nin', $listDirn, $listOrder); ?>
@@ -63,7 +61,7 @@ $wa->useStyle('com_afarosadelsvents.list');
 
 						<?php if ($canEdit || $canDelete): ?>
 					<th class="center">
-						<?php echo Text::_('COM_AFAROSADELSVENTS_FAMILIES_ACTIONS'); ?>
+						<?//php echo Text::_('COM_AFAROSADELSVENTS_FAMILIES_ACTIONS'); ?>
 					</th>
 					<?php endif; ?>
 
@@ -87,9 +85,7 @@ $wa->useStyle('com_afarosadelsvents.list');
 
 				<tr class="row<?php echo $i % 2; ?>">
 					
-					<td>
-						<?php echo $item->id; ?>
-					</td>
+					
 					<td>
 						<?php $canCheckin = Factory::getApplication()->getIdentity()->authorise('core.manage', 'com_afarosadelsvents.' . $item->id) || $item->checked_out == Factory::getApplication()->getIdentity()->id; ?>
 						<?php if($canCheckin && $item->checked_out > 0) : ?>
